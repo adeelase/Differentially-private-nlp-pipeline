@@ -22,12 +22,40 @@ An end-to-end Local Differential Privacy (LDP) text obfuscation framework operat
 
 ## Architecture & Technical Workflow
 
-graph TD
-    A[📄 Raw Text Dataset<br/><i>e.g., CSV / IMDB</i>] --> B[🧹 NLTK Preprocessing<br/><i>Regex & Lemmatize</i>]
-    B --> C[🔤 GloVe Embedding Lookup<br/><i>50D Vector Space ℝᵈ</i>]
-    C --> D[🎲 Multivariate Laplacian Noise<br/><i>Injection ε-DP</i>]
-    D --> E[🔄 Top-k Stochastic Replacement<br/><i>Cosine Similarity</i>]
-    E --> F[💾 Privatized Output<br/><i>CSV Batch Stream</i>]
+┌──────────────────────────────────────────┐
+  │            Raw Text Dataset              │
+  │           (e.g., CSV / IMDB)             │
+  └────────────────────┬─────────────────────┘
+                       │
+                       ▼
+  ┌──────────────────────────────────────────┐
+  │            NLTK Preprocessing            │
+  │           (Regex & Lemmatize)            │
+  └────────────────────┬─────────────────────┘
+                       │
+                       ▼
+  ┌──────────────────────────────────────────┐
+  │         GloVe Embedding Lookup           │
+  │         (50D Vector Space ℝᵈ)            │
+  └────────────────────┬─────────────────────┘
+                       │
+                       ▼
+  ┌──────────────────────────────────────────┐
+  │ Multivariate Laplacian Noise Injection   │
+  │                 (ε-DP)                   │
+  └────────────────────┬─────────────────────┘
+                       │
+                       ▼
+  ┌──────────────────────────────────────────┐
+  │      Top-k Stochastic Replacement        │
+  │             (Cosine Similarity)          │
+  └────────────────────┬─────────────────────┘
+                       │
+                       ▼
+  ┌──────────────────────────────────────────┐
+  │            Privatized Output             │
+  │           (CSV Batch Stream)             │
+  └──────────────────────────────────────────┘
 
 ## Theoretical Foundations
 
