@@ -1,17 +1,12 @@
 # Differentially Private NLP Text Obfuscation Pipeline
 
-![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
-![Framework](https://img.shields.io/badge/PyTorch-CUDA%20Accelerated-orange)
-![Privacy Model](https://img.shields.io/badge/Privacy-Local%20Differential%20Privacy%20%28%CE%B5--DP%29-green)
-![Academic](https://img.shields.io/badge/Project-M.Tech%20Thesis-purple)
-
-> 🎓 **Academic Project Note:** This repository contains the core research implementation and engineering pipeline developed as part of my **M.Tech Final Thesis / Capstone Project**.
+> 🎓 **Academic Project Note:** This repository contains the core research implementation and engineering pipeline developed as part of my M.Tech Final Thesis / Capstone Project.
 
 An end-to-end Local Differential Privacy (LDP) text obfuscation framework operating in continuous dense vector space ($\mathbb{R}^d$). This pipeline protects sensitive unstructured text datasets (e.g., IMDB reviews, clinical notes, support chats) from adversarial re-identification and membership inference attacks while preserving high downstream semantic utility for Machine Learning models.
 
 ---
 
-## Key Features
+## 🔑 Key Features
 
 * **Continuous Metric LDP:** Injects calibrated Multivariate Laplacian Noise directly into 50-dimensional GloVe embedding space rather than using crude discrete token replacement.
 * **Stochastic Top-$k$ Replacement:** Defends against deterministic reverse-spatial lookup attacks by sampling substitutes non-deterministically from nearest top-$k$ candidates ($k=5$).
@@ -20,26 +15,40 @@ An end-to-end Local Differential Privacy (LDP) text obfuscation framework operat
 
 ---
 
-## Architecture & Technical Workflow
+## 🏗️ Architecture & Technical Workflow
 
-+-------------------+      +----------------------+      +---------------------------+| Raw Text Dataset  | ---> |  NLTK Preprocessing  | ---> | GloVe Embedding Lookup    || (e.g., CSV/IMDB)  |      | (Regex/Lemmatize)    |      | (50D Vector Space R^d)    |+-------------------+      +----------------------+      +---------------------------+|v+-------------------+      +----------------------+      +---------------------------+| Privatized Output | <--- | Top-k Stochastic     | <--- | Multivariate Laplacian    || (CSV Batch Stream)|      | Cosine Replacement   |      | Noise Injection (ε-DP)    |+-------------------+      +----------------------+      +---------------------------+
----
++-------------------+     +----------------------+     +---------------------------+
+|  Raw Text Dataset | --> |  NLTK Preprocessing  | --> |   GloVe Embedding Lookup  |
+|  (e.g., CSV/IMDB) |     |  (Regex/Lemmatize)   |     |  (50D Vector Space R^d)   |
++-------------------+     +----------------------+     +---------------------------+
+|
+v
++-------------------+     +----------------------+     +---------------------------+
+| Privatized Output | <-- |   Top-k Stochastic   | <-- |   Multivariate Laplacian  |
+| (CSV Batch Stream)|     |  Cosine Replacement  |     |   Noise Injection (ε-DP)  |
++-------------------+     +----------------------+     +---------------------------+
 
-## Theoretical Foundations
 
-A randomized algorithm $M$ provides **$\varepsilon$-Local Differential Privacy** if, for any two inputs $d, d'$ and output set $S$:
+## 📐 Theoretical Foundations
 
-$$\mathbb{P}[M(d) \in S] \le e^{\varepsilon} \cdot \mathbb{P}[M(d') \in S]$$
+A randomized algorithm $\mathcal{M}$ provides $\epsilon$-Local Differential Privacy if, for any two inputs $d, d'$ and output set $S$:
+
+$$\mathbb{P}[\mathcal{M}(d) \in S] \le e^{\epsilon} \cdot \mathbb{P}[\mathcal{M}(d') \in S]$$
 
 ### Noise Mechanism in $\mathbb{R}^d$ Space
+
 Noise vector $N \in \mathbb{R}^d$ is generated via:
-1. **Direction Vector ($u$):** Uniform sampling on a $d$-dimensional unit sphere via standard normal variables: $u = Z / \Vert{}Z\Vert{}_2$, where $Z \sim \mathcal{N}(0, I_d)$.
-2. **Magnitude ($r$):** Radial distance sampled from a Gamma distribution parameterized by dimension $d$ and scale parameter $b = \Delta / \varepsilon$: $r \sim \text{Gamma}(\text{shape}=d, \text{scale}=\Delta / \varepsilon)$.
-3. **Perturbation:** $v_{\text{noisy}} = v_{\text{original}} + (r \cdot u)$.
+
+1. **Direction Vector ($u$):** Uniform sampling on a $d$-dimensional unit sphere via standard normal variables:
+   $$u = \frac{Z}{\Vert{}Z\Vert{}_2}, \quad \text{where } Z \sim \mathcal{N}(0, I_d)$$
+2. **Magnitude ($r$):** Radial distance sampled from a Gamma distribution parameterized by dimension $d$ and scale parameter $b = \frac{\Delta}{\epsilon}$:
+   $$r \sim \text{Gamma}\left(\text{shape}=d, \text{scale}=\frac{\Delta}{\epsilon}\right)$$
+3. **Perturbation:**
+   $$v_{\text{noisy}} = v_{\text{original}} + (r \cdot u)$$
 
 ---
 
-## Installation & Setup
+## ⚡ Installation & Setup
 
 ```bash
 # Clone the repository
@@ -52,7 +61,8 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install torch numpy pandas gensim nltk reportlab
-Core Implementation (main.py)Pythonimport re
+
+import re
 import numpy as np
 import pandas as pd
 import torch
@@ -146,4 +156,8 @@ def process_pipeline_batched(df: pd.DataFrame, text_col: str, model: KeyedVector
             export_df.to_csv(output_csv, mode='a', index=False, header=False)
             
     print(f"Dataset successfully privatized and saved to {output_csv}")
-🎓 Academic Background & Research ScopeDeveloped and evaluated as part of my M.Tech Degree (Master of Technology) Thesis Project. The research explores bridging theoretical Local Differential Privacy mechanisms in continuous metric spaces ($\mathbb{R}^d$) with scalable GPU-accelerated Machine Learning infrastructure.
+
+
+    🎓 Academic Background & Research ScopeDeveloped and evaluated as part of my M.Tech Degree (Master of Technology) Thesis Project. The research explores bridging theoretical Local Differential Privacy mechanisms in continuous metric spaces ($\mathbb{R}^d$) with scalable GPU-accelerated Machine Learning infrastructure.
+
+    
