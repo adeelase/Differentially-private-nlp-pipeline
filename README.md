@@ -14,7 +14,7 @@ An end-to-end Local Differential Privacy (LDP) text obfuscation framework operat
 ## Key Features
 
 * **Continuous Metric LDP:** Injects calibrated Multivariate Laplacian Noise directly into 50-dimensional GloVe embedding space rather than using crude discrete token replacement.
-* **Stochastic Top-$k$ Replacement:** Defends against deterministic reverse-spatial lookup attacks by sampling substitutes non-deterministically from nearest top-$k$ candidates ($k=5$).
+* **Stochastic Top-k Replacement:** Defends against deterministic reverse-spatial lookup attacks by sampling substitutes non-deterministically from nearest top-k candidates ($k=5$).
 * **Robust Exception Handling:** Implements `try-except` OOV (Out-Of-Vocabulary) fallbacks to prevent pipeline failures on unseen terms.
 * **CUDA-Accelerated Batch Streaming:** Optimized for GPU execution using PyTorch tensor casting and `pandas.iloc` chunked CSV export to maintain low memory overhead on large datasets.
 
@@ -22,16 +22,12 @@ An end-to-end Local Differential Privacy (LDP) text obfuscation framework operat
 
 ## Architecture & Technical Workflow
 
-+-------------------+      +----------------------+      +---------------------------+
-| Raw Text Dataset  | ---> |  NLTK Preprocessing  | ---> | GloVe Embedding Lookup    |
-| (e.g., CSV/IMDB)  |      | (Regex/Lemmatize)    |      | (50D Vector Space R^d)    |
-+-------------------+      +----------------------+      +---------------------------+
-|
-v
-+-------------------+      +----------------------+      +---------------------------+
-| Privatized Output | <--- | Top-k Stochastic     | <--- | Multivariate Laplacian    |
-| (CSV Batch Stream)|      | Cosine Replacement   |      | Noise Injection (ε-DP)    |
-+-------------------+      +----------------------+      +---------------------------+
+graph TD
+    A[📄 Raw Text Dataset<br/><i>e.g., CSV / IMDB</i>] --> B[🧹 NLTK Preprocessing<br/><i>Regex & Lemmatize</i>]
+    B --> C[🔤 GloVe Embedding Lookup<br/><i>50D Vector Space ℝᵈ</i>]
+    C --> D[🎲 Multivariate Laplacian Noise<br/><i>Injection ε-DP</i>]
+    D --> E[🔄 Top-k Stochastic Replacement<br/><i>Cosine Similarity</i>]
+    E --> F[💾 Privatized Output<br/><i>CSV Batch Stream</i>]
 
 ## Theoretical Foundations
 
