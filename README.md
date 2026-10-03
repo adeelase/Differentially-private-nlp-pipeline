@@ -51,7 +51,7 @@ Noise vector $N \in \mathbb{R}^d$ is generated via:
 
 ```bash
 # Clone the repository
-git clone [https://github.com/your-username/differentially-private-nlp-pipeline.git](https://github.com/your-username/differentially-private-nlp-pipeline.git)
+git clone https://github.com/your-username/differentially-private-nlp-pipeline.git
 cd differentially-private-nlp-pipeline
 
 # Create virtual environment
@@ -60,9 +60,13 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install torch numpy pandas gensim nltk reportlab
+```
 
-Core Implementation (main.py)
+---
 
+## Core Implementation (`main.py`)
+
+```python
 import re
 import numpy as np
 import pandas as pd
@@ -157,8 +161,12 @@ def process_pipeline_batched(df: pd.DataFrame, text_col: str, model: KeyedVector
             export_df.to_csv(output_csv, mode='a', index=False, header=False)
             
     print(f"Dataset successfully privatized and saved to {output_csv}")
+```
 
-    
-🎓 Academic Background & Research ScopeDeveloped and evaluated as part of my M.Tech Degree (Master of Technology) Thesis Project. 
+---
+
+## 🎓 Academic Background & Research Scope
+
+Developed and evaluated as part of my M.Tech Degree (Master of Technology) Thesis Project. 
 The research explores bridging theoretical Local Differential Privacy mechanisms in continuous metric spaces ($\mathbb{R}^d$) with 
 scalable GPU-accelerated Machine Learning infrastructure.
